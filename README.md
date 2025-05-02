@@ -48,6 +48,17 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
     ```
 
 2. Install dependencies:
+    Install tessaract for ocr on images. 
+
+    If using homebrew on mac: 
+    ```shell
+    brew install tesseract
+    ```
+    Otherwise, followed instructions here: https://pyimagesearch.com/2021/08/16/installing-tesseract-pytesseract-and-python-ocr-packages-on-your-system/
+
+
+    Install the rest of dependencies in virtual environment: 
+
     ```shell
     python -m venv venv
     source venv/bin/activate
