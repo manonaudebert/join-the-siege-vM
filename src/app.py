@@ -1,9 +1,13 @@
+from enum import Enum
 from flask import Flask, request, jsonify
 
-from src.classifier import classify_file
+from src.document_classifier.classifier import classify_file
+from src.model.model_utils import ModelType
+
 app = Flask(__name__)
 
-ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg'}
+ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg','docx'}
+CURRENT_MODEL_TYPE = ModelType.NAIVE_BAYES
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -15,15 +19,16 @@ def classify_file_route():
         return jsonify({"error": "No file part in the request"}), 400
 
     file = request.files['file']
+
     if file.filename == '':
         return jsonify({"error": "No selected file"}), 400
 
     if not allowed_file(file.filename):
         return jsonify({"error": f"File type not allowed"}), 400
 
-    file_class = classify_file(file)
+    # Classify using the current model set 
+    file_class = classify_file(file, CURRENT_MODEL_TYPE)
     return jsonify({"file_class": file_class}), 200
-
 
 if __name__ == '__main__':
     app.run(debug=True)

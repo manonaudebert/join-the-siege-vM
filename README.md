@@ -57,13 +57,23 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
     Otherwise, followed instructions here: https://pyimagesearch.com/2021/08/16/installing-tesseract-pytesseract-and-python-ocr-packages-on-your-system/
 
 
-    Install the rest of dependencies in virtual environment: 
+    Install the rest of dependencies in virtual environment:
 
     ```shell
     python -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
     ```
+3. If there's no model pkl files under model > trained_models for naive_bayes.pkl or if you want to re-train the model with more data, then train
+    ```shell
+    python -m src.model.naive_bayes_classifier
+    ```
+
+    To train the logistic classifer model, run:
+    ```shell
+    python -m src.model.logistic_classifier
+    ```
+    A new pkl file will only be created if the run performs better in accuracy than the previously saved file.
 
 3. Run the Flask app:
     ```shell
@@ -79,6 +89,10 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
    ```shell
     pytest
     ```
+
+## Notes
+To add a new type of document, create a folder under file_data with the desired document label and add examples. 
+Re-train the model. 
 
 ## Submission
 

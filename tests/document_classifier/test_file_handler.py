@@ -3,7 +3,7 @@ from werkzeug.datastructures import FileStorage
 from io import BytesIO
 import pytest
 
-from src.utils.file_handler import FileHandlerFactory, ImageHandler, PdfHandler
+from src.document_classifier.text_extractor import FileHandlerFactory, ImageHandler, PdfHandler, WordDocHandler
 
 """
 Unit tests for file_handler. 
@@ -13,6 +13,7 @@ Test that factory creates correct file handler type and that each handler can ex
 
 image_file_name = "drivers_license_1.jpg"
 pdf_file_name = "bank_statement_1.pdf"
+docx_file_name = "invoice_4.docx"
 
 def test_image_handler():
     # Test image text extraction success case
@@ -43,6 +44,22 @@ def test_pdf_handler():
     assert isinstance(text, str)
     assert isinstance(file_handler, PdfHandler)
     assert "statement" in text.lower()
+
+
+def test_docx_handler():
+    # Test docx text extraction success case
+    with open(get_file_path(docx_file_name), "rb") as f:
+        file = FileStorage(
+            stream=BytesIO(f.read()),
+            filename=docx_file_name
+        )
+
+    file_handler = FileHandlerFactory.get_file_handler(file)
+    text = file_handler.extract_text(file)
+
+    assert isinstance(text, str)
+    assert isinstance(file_handler, WordDocHandler)
+    assert "invoice" in text.lower()
 
 def test_no_handler():
     # Test no handler found for file type
