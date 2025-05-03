@@ -66,6 +66,7 @@ def train_model():
     if not MODEL_PATH.exists() or is_better_than_previous_accuracy(SCORE_PATH, mean_accuracy):
         # Save pkl file for model if it performs better than the last or if there's no last run
         # Save the updated accuracy as well 
+        # If needing to train for a new document type and model isn't being save due to accuracy being worse,this can be commented out or delete the existing pkl file.
         joblib.dump(model, MODEL_PATH)
         with open(SCORE_PATH, "w") as f:
             f.write(str(mean_accuracy))

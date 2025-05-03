@@ -15,7 +15,7 @@ def load_file_content_with_labels(data_dir, file_handler_factory):
     Training data must be in folders with the label as the folder name.
     For example: 
 
-    files/
+    file_data/
     ├── bank_statement/
         ├── file1.pdf
         ├── file2.docx

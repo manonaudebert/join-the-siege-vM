@@ -25,6 +25,8 @@ def classify_file_route():
 
     results = []
 
+    # For each file, check if it's allowed and then classify it. 
+    # If there's an error during classification, add an error message. 
     for file in files:
         if not allowed_file(file.filename):
             results.append({
@@ -39,6 +41,8 @@ def classify_file_route():
                 "filename": file.filename,
                 "file_class": file_class
             })
+        except FileNotFoundError as e:
+            return jsonify({"error": "No model found. Model training required first. "}), 500
         except Exception as e:
             results.append({
                 "filename": file.filename,

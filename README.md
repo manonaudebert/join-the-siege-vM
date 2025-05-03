@@ -84,8 +84,23 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
     ```shell
     curl -X POST -F 'file=@path_to_pdf.pdf' http://127.0.0.1:5000/classify_file
 
-    curl -X POST -F "file=@path_to_pdf.pdf" -F "file=@path_to_docs.docx" http://localhost:5000/classify_file
+    curl -X POST -F "file=@file_data/invoice/invoice_4.docx" -F "file=@file_data/bank_statement/bank_statement_1.pdf" -F "file=@file_data/drivers_license/drivers_licence_2.jpg" http://127.0.0.1:5000/classify_file
+    ```
 
+    Sample output:
+    ```
+    {
+    "results": [
+        {
+            "file_class": "bank_statement",
+        "filename": "bank_statement_1.pdf"
+        },
+        {
+        "file_class": "drivers_license",
+        "filename": "drivers_licence_2.jpg"
+        }
+    ]
+    }
     ```
 
 5. Run tests:
