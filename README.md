@@ -48,6 +48,7 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
     ```
 
 2. Install dependencies:
+
     Install tessaract for ocr on images. 
 
     If using homebrew on mac: 
@@ -64,7 +65,7 @@ We encourage you to be creative! Feel free to use any libraries, tools, services
     source venv/bin/activate
     pip install -r requirements.txt
     ```
-3. If there's no model pkl files under model > trained_models for naive_bayes.pkl or if you want to re-train the model with more data, then train
+3. If there's no model pkl files under src > model > trained_models for naive_bayes.pkl or if you want to re-train the model with more data, then run: 
     ```shell
     python -m src.model.naive_bayes_classifier
     ```
