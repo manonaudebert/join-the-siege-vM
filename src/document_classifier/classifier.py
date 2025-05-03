@@ -16,8 +16,9 @@ def classify_file(file: FileStorage, model_name: ModelType):
         text = file_handler.extract_text(file)
         predicted_class = model.predict([text])[0]
         return predicted_class
-    except:
-        return "Unknown file type"
-    
+    except ValueError as e:
+        return f"Unknown file type"
+    except Exception as e:
+        return RuntimeError(f"Error during file classification {e}")
 
 

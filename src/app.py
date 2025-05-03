@@ -18,17 +18,34 @@ def classify_file_route():
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
 
-    file = request.files['file']
+    files = request.files.getlist("file")
 
-    if file.filename == '':
-        return jsonify({"error": "No selected file"}), 400
+    if not files or all(f.filename == '' for f in files):
+        return jsonify({"error": "No files selected"}), 400
 
-    if not allowed_file(file.filename):
-        return jsonify({"error": f"File type not allowed"}), 400
+    results = []
 
-    # Classify using the current model set 
-    file_class = classify_file(file, CURRENT_MODEL_TYPE)
-    return jsonify({"file_class": file_class}), 200
+    for file in files:
+        if not allowed_file(file.filename):
+            results.append({
+                "filename": file.filename,
+                "error": "File type not allowed"
+            })
+            continue
+
+        try:
+            file_class = classify_file(file, CURRENT_MODEL_TYPE)
+            results.append({
+                "filename": file.filename,
+                "file_class": file_class
+            })
+        except Exception as e:
+            results.append({
+                "filename": file.filename,
+                "error": str(e)
+            })
+
+    return jsonify({"results": results}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

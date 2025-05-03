@@ -35,4 +35,20 @@ def test_success(client, mocker):
     data = {'file': (BytesIO(b"dummy content"), 'file.pdf')}
     response = client.post('/classify_file', data=data, content_type='multipart/form-data')
     assert response.status_code == 200
-    assert response.get_json() == {"file_class": "test_class"}
+    assert response.get_json() == {'results': [{'file_class': 'test_class', 'filename': 'file.pdf'}]}
+
+def test_success_multiple_files(client, mocker):
+    mocker.patch('src.app.classify_file', side_effect=['test_class','test_class_different'])
+
+    data = {'file': [(BytesIO(b"dummy content"), 'file.pdf'), (BytesIO(b"dummy content"), 'file_2.pdf')]}
+    response = client.post('/classify_file', data=data, content_type='multipart/form-data')
+    assert response.status_code == 200
+    assert response.get_json() == {'results': [{'file_class': 'test_class', 'filename': 'file.pdf'}, {'file_class': 'test_class_different', 'filename': 'file_2.pdf'}]}
+
+def test_success_then_failure_files(client, mocker):
+    mocker.patch('src.app.classify_file', side_effect=['test_class', Exception("Could not process file")])
+
+    data = {'file': [(BytesIO(b"dummy content"), 'file.pdf'), (BytesIO(b"dummy content"), 'file_2.pdf')]}
+    response = client.post('/classify_file', data=data, content_type='multipart/form-data')
+    assert response.status_code == 200
+    assert response.get_json() == {'results': [{'file_class': 'test_class', 'filename': 'file.pdf'}, {'error': 'Could not process file', 'filename': 'file_2.pdf'}]}
